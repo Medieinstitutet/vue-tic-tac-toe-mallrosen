@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Player } from './models/Player';
-import { log } from 'console';
-
 
 const PlayerNameX = "Spelare X :"
 const PlayerNameO = "Spelare O :"
@@ -27,6 +24,7 @@ const handleSubmit = () =>{
     }
 }
 
+
 </script>
 
 <template>
@@ -36,7 +34,7 @@ const handleSubmit = () =>{
             <input type="text" v-model="playerInputX">
             <p>{{ PlayerNameO }}</p>
             <input type="text" v-model="PlayerInputO">
-            <button>Spara</button>
+            <button @click='handleSubmit'>Spara</button>
             <p> {{ error }}</p>
         </form>
     </div>
