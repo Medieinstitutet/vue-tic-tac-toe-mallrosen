@@ -5,4 +5,6 @@ export interface IGameState{
     onGame: boolean
     players: Player[]
     board: string[]
+    winner:boolean
+    evenGame: boolean
 }

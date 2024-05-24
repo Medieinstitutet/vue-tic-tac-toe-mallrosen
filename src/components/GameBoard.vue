@@ -19,14 +19,6 @@ interface GameBoardProps{
 defineProps<GameBoardProps>();
 
 
-// const player = ref ('X');
-// const board = ref ([
-//   ['', '', ''],
-//   ['', '', ''],
-//   ['', '', '']
-// ])
-
-
 
 </script>
 
@@ -34,7 +26,7 @@ defineProps<GameBoardProps>();
     <p v-if="playerX"> Spelare X: {{ currentPlayer[0].name }}</p>
     <p v-else> Spelare O: {{ currentPlayer[1].name }}</p>
 
-  <div @click="$emit('togglePlayer')" class="board"> 
+    <div @click="$emit('togglePlayer')" class="board"> 
     <div v-for="(square,i) in board" :key="i" class='square' @click="$emit('move', i)">{{ board[i] }}</div>
     </div>
     <button @click="$emit('newGame')">Ny spelomgång</button>
