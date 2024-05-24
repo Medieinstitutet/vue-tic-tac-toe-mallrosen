@@ -24,6 +24,13 @@ if(localStorage.getItem('array')){
   state.value.board = JSON.parse(localStorage.getItem('array') || "")
 }
 
+if(localStorage.getItem('scoreO')){
+  state.value.players[1].score = JSON.parse(localStorage.getItem('scoreO') || "")
+}
+
+if(localStorage.getItem('scoreX')){
+  state.value.players[0].score = JSON.parse(localStorage.getItem('scoreX') || "")
+}
 
 const winninglinesIndex = [
   [0, 1, 2],

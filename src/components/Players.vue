@@ -31,7 +31,7 @@ const handleSubmit = () => {
       <input type="text" v-model="playerInputX" />
       <p>{{ PlayerNameO }}</p>
       <input type="text" v-model="PlayerInputO" />
-      <button @click="handleSubmit">Spara</button>
+      <button @click="handleSubmit">Spela</button>
       <p>{{ error }}</p>
     </form>
   </div>
@@ -45,7 +45,7 @@ form {
     min-height: 30px;
     font-size: 20px;
   }
-  p{
+  p {
     font-size: 20px;
   }
   button {

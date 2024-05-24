@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Players from "./Players.vue";
 import { Player } from "./models/Player";
 
 defineEmits<{
@@ -61,7 +60,6 @@ defineProps<GameBoardProps>();
   align-items: center;
   max-width: 320px;
   border: 2px;
-  border-radius: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -75,7 +73,7 @@ defineProps<GameBoardProps>();
 }
 button {
   display: flex;
-  width: 300px;
+  width: 260px;
   margin: 20px;
   justify-content: center;
 }
