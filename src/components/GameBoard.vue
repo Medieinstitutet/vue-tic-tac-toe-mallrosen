@@ -1,54 +1,86 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { Player } from './models/Player';
-
-
+import Players from "./Players.vue";
+import { Player } from "./models/Player";
 
 defineEmits<{
-    (e: 'newGame'):void
-    (e: 'togglePlayer'):void
-    (e: 'move', i:number):void
-}>()
+  (e: "newGame"): void;
+  (e: "move", i: number): void;
+  (e: "emptyGame"): void;
+}>();
 
-interface GameBoardProps{
-    playerX: boolean
-    currentPlayer: Player[]
-    board: string[]
+interface GameBoardProps {
+  playerX: boolean;
+  currentPlayer: Player[];
+  board: string[];
+  winner: boolean;
+  evenGame: boolean;
 }
 
 defineProps<GameBoardProps>();
-
-
-
 </script>
 
 <template>
-    <p v-if="playerX"> Spelare X: {{ currentPlayer[0].name }}</p>
-    <p v-else> Spelare O: {{ currentPlayer[1].name }}</p>
 
-    <div @click="$emit('togglePlayer')" class="board"> 
-    <div v-for="(square,i) in board" :key="i" class='square' @click="$emit('move', i)">{{ board[i] }}</div>
+    <h1 v-if="!playerX && winner">{{ currentPlayer[1].name + " vann!"}}</h1>
+    <h1 v-if="playerX && winner">{{ currentPlayer[0].name + " vann!"}}</h1>
+    <h1 v-if="evenGame">Oavgjort!</h1>
+
+    <div v-if="!winner && !evenGame">
+    <p v-if="!playerX">Spelare X: {{ currentPlayer[0].name }}</p>
+    <p v-else>Spelare O: {{ currentPlayer[1].name }}</p>
     </div>
-    <button @click="$emit('newGame')">Ny spelomgång</button>
+  <div class="board">
+    <div
+      v-for="(square, i) in board"
+      :key="i"
+      class="square"
+      @click="$emit('move', i)">
+      {{ board[i] }}
+    </div>
+  </div>
+  <button @click="$emit('newGame')">Nya spelare</button>
+  <button @click="$emit('emptyGame')">Ny spelomgång</button>
+
+  <p>
+    {{
+      currentPlayer[0].name +
+      " : " +
+      currentPlayer[0].score +
+      "  |  " +
+      currentPlayer[1].name +
+      " : " +
+      currentPlayer[1].score
+    }}
+  </p>
 </template>
 
 <style scoped>
+.board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 320px;
+  border: 2px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-
-.board{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 320px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-.square{
+  .square {
+    font-size: 60px;
     width: 100px;
     height: 100px;
     border: 1px solid black;
+  }
+}
+button {
+  display: flex;
+  width: 300px;
+  margin: 20px;
+  justify-content: center;
 }
 
+p {
+  font-size: 30px;
 }
 </style>

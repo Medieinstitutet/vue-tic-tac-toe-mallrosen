@@ -14,6 +14,17 @@ const state = ref<IGameState>({
   evenGame: false,
 });
 
+if(localStorage.getItem('players')){
+  state.value.players = JSON.parse(localStorage.getItem('players') || "")
+  state.value.onGame = !state.value.onGame;
+  console.log(state.value.players);
+}
+
+if(localStorage.getItem('array')){
+  state.value.board = JSON.parse(localStorage.getItem('array') || "")
+}
+
+
 const winninglinesIndex = [
   [0, 1, 2],
   [3, 4, 5],
@@ -28,23 +39,24 @@ const winninglinesIndex = [
 const addPlayer = (name: string) => {
   state.value.players.push(new Player(name));
   if (state.value.players.length === 2) {
+    localStorage.setItem("players", JSON.stringify(state.value.players));
     state.value.onGame = !state.value.onGame;
-    console.log(state.value.players.length);
   }
 };
 
 const newGame = () => {
+  localStorage.clear()
   state.value.winner = false;
   state.value.evenGame = false;
-  state.value.players.splice(0, 1);
+  state.value.players.splice(0, 2);
   state.value.board = ["", "", "", "", "", "", "", "", ""];
   state.value.onGame = !state.value.onGame;
 };
 
-const togglePlayers = () => {
+const togglePlayers = (i:number) => {
   if (state.value.evenGame || state.value.winner) {
     return;
-  }
+  }if (state.value.board[i] === "")
   state.value.playerX = !state.value.playerX;
 };
 
@@ -58,10 +70,18 @@ const checkWinner = () => {
       state.value.board[a] !== ""
     ) {
       state.value.winner = true;
+      if(state.value.playerX === true){
+      state.value.players[0].score += 1
+      localStorage.setItem("scoreX", JSON.stringify(state.value.players[0].score))
+      }
+      else{
+      state.value.players[1].score += 1
+      localStorage.setItem("scoreO", JSON.stringify(state.value.players[1].score))
+      }
       return;
     }
   }
-};
+}
 
 const checkEven = () => {
   if (state.value.winner === false) {
@@ -77,30 +97,41 @@ const checkEven = () => {
 };
 
 const playerMove = (i: number) => {
+  if ((state.value.board[i] === "")){
+    togglePlayers(i)}
   if (state.value.evenGame || state.value.winner) return;
-  if (state.value.playerX) {
+
+  if ((state.value.playerX) && (state.value.board[i] === "")) {
     state.value.board[i] = "X";
-  } else {
+  } else if ((!state.value.playerX) && (state.value.board[i] === "")) {
     state.value.board[i] = "O";
   }
+  localStorage.setItem("array", JSON.stringify(state.value.board));
   checkWinner();
   checkEven();
+  
 };
+
+const emptyGame =()=>{
+  state.value.winner = false;
+  state.value.evenGame = false;
+  state.value.board = ["", "", "", "", "", "", "", "", ""];
+}
+
 </script>
 
 <template>
-  <h1 v-if="state.winner">Vinst</h1>
-
-  <h1 v-if="state.evenGame">Oavgjort</h1>
-
   <GameBoard
     v-if="state.onGame"
     :board="state.board"
     :player-x="state.playerX"
     :current-player="state.players"
+    :even-game="state.evenGame"
+    :winner="state.winner"
     @move="playerMove"
     @new-game="newGame"
-    @toggle-player="togglePlayers" />
+    @toggle-player="togglePlayers"
+    @empty-game="emptyGame" />
   <Players v-else @add-player="addPlayer" />
 </template>
 
